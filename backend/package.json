@@ -1,0 +1,30 @@
+{
+  "name": "node-ts-fastify-boilerplate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --enable-source-maps dist/index.js",
+    "dev": "tsc -w",
+    "build": "tsc",
+    "gen:schema": "yarn ts-node-transpile-only src/lib/utils/generateSchemasFromTS.ts"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "2.26.0",
+    "@types/mqtt": "^2.5.0",
+    "aedes": "^0.46.0",
+    "fastify": "^3.10.1",
+    "fastify-cors": "^5.1.0",
+    "fastify-swagger": "3.4.0",
+    "mqtt": "^4.2.8",
+    "prisma": "2.26.0",
+    "websocket-stream": "^5.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.21",
+    "@types/rimraf": "^3.0.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.0.0",
+    "typescript-json-schema": "^0.50.1"
+  }
+}
