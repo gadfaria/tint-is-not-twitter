@@ -1,3 +1,6 @@
+import LoginBodySchema from "./LoginBody.json"
+export { LoginBodySchema }
+
 import CreateUserBodySchema from "./CreateUserBody.json"
 export { CreateUserBodySchema }
 

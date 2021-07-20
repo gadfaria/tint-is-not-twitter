@@ -6,6 +6,9 @@ import { Route } from "./types/common";
 import { initMQTTServer } from "./services/MQTTServer";
 import { initMQTTClient } from "./services/MQTTClient";
 import { initPrisma } from "./services/initPrisma";
+import { initLoginRoutes } from "./routes/Login";
+
+const Configs = require("../config.json");
 
 /**
  * Main server:
@@ -17,10 +20,8 @@ import { initPrisma } from "./services/initPrisma";
 const app = fastify();
 app.register(fastifyCors);
 
-const API_VERSION = "v0.1.0";
-
 async function main() {
-  initDocumentation(app, API_VERSION);
+  initDocumentation(app, Configs.API_VERSION);
   await initMQTTServer();
   const mqttClient = await initMQTTClient();
   const prisma = await initPrisma(mqttClient);
@@ -28,10 +29,15 @@ async function main() {
   /**
    * Route array with prefixes
    */
+
   const Routes: Route[] = [
     {
       init: initUserRoutes,
       prefix: "/user",
+    },
+    {
+      init: initLoginRoutes,
+      prefix: "/login",
     },
   ];
 
@@ -53,7 +59,7 @@ async function main() {
   await app.ready();
   app.swagger();
 
-  let listeningResult = await app.listen(6680, "0.0.0.0");
+  let listeningResult = await app.listen(Configs.PORT, "0.0.0.0");
   console.log(`Fastify initialized at ${listeningResult}`);
 }
 

@@ -13,8 +13,11 @@ generator client {
 model User {
   id String @id @default(cuid())
 
-  username String
-  name String @default("")
+  username String @unique
+  password String
+  name String 
+  accessToken String @unique
+
   posts    Post[]
 
   comments Comment[]

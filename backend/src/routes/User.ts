@@ -9,6 +9,12 @@ import {
   UpdateUserBodyIRoute,
   UpdateUserParamsIRoute,
 } from "../types/UserTypes";
+import bcrypt from "bcrypt";
+import { nanoid } from "nanoid";
+import { SendError, SendSuccess } from "../utils/HttpResponse";
+import { UserErrors } from "../utils/Errors";
+
+const SALT_ROUNDS = 10;
 
 export function initUserRoutes(app: FastifyApp, { prisma }: Services) {
   app.post<{
@@ -18,19 +24,30 @@ export function initUserRoutes(app: FastifyApp, { prisma }: Services) {
     {
       prefixTrailingSlash: "no-slash",
       schema: {
+        description: "Create an user",
         body: CreateUserBodySchema,
       },
     },
-    async (req) => {
-      const { username } = req.body;
+    async (req, res) => {
+      const { password, username } = req.body;
+
+      const userExist = await prisma.user.findUnique({ where: { username } });
+      if (userExist)
+        return SendError(res, 400, UserErrors.USERNAME_ALREADY_EXISTS);
+
+      const passwordWithHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+      const accessToken = nanoid();
 
       let user = await prisma.user.create({
         data: {
-          username,
+          ...req.body,
+          password: passwordWithHash,
+          accessToken,
         },
       });
 
-      return { user };
+      SendSuccess(res, 200, user);
     }
   );
 
@@ -64,12 +81,24 @@ export function initUserRoutes(app: FastifyApp, { prisma }: Services) {
     }
   );
 
-  app.get(
-    "/all",
-    async (req) => {
-      let users = await prisma.user.findMany({});
+  app.get<{}>(
+    "/",
+    {
+      prefixTrailingSlash: "no-slash",
+      schema: {
+        description: "Get user by accessToken",
+      },
+    },
+    async (req, res) => {
+      const { authorization } = req.headers;
 
-      return { users };
+      const accessToken = (authorization as string).split(" ")[1];
+
+      let user = await prisma.user.findUnique({ where: { accessToken } });
+
+      if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
+
+      SendSuccess(res, 200, user);
     }
   );
 }
