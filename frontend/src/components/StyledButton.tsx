@@ -19,14 +19,23 @@ export interface Props
 
 const InvertedColors = css`
   background-color: white;
-  border-color: #dddddd;
-  color: #555555;
+  border-color: rgb(29, 161, 242);
+  color: rgb(29, 161, 242);
+
+  :hover {
+    background-color: #1a91da20;
+  }
 `;
 
 const NormalColors = css`
   background-color: rgb(29, 161, 242);
   border-color: rgb(29, 161, 242);
   color: white;
+
+  &:hover {
+    background-color: #1a91da;
+    border-color: #1a91da;
+  }
 `;
 
 const Button = styled.button`
@@ -49,10 +58,6 @@ const Button = styled.button`
   &:disabled {
     opacity: 0.6;
     cursor: default;
-  }
-  &:hover {
-    background-color: #1a91da;
-    border-color: #1a91da;
   }
 `;
 

@@ -50,14 +50,13 @@ const Input = styled.input`
 const Label = styled.span`
   width: 100%;
   white-space: pre-wrap;
-  font-size: 17px;
   color: #0f1419;
 `;
 
 const placeholderStyle: MotionStyle = {
   position: "absolute",
   bottom: 15,
-  left: 10,
+  left: 12,
   scale: 1,
   pointerEvents: "none",
   originX: 0.1,
@@ -65,13 +64,13 @@ const placeholderStyle: MotionStyle = {
 
 const initialPlaceholderState: TargetAndTransition = {
   y: -3,
-  scale: 1,
+  fontSize: "17px",
   opacity: 0.6,
 };
 
 const upperPlaceholderState: TargetAndTransition = {
   y: -15,
-  scale: 0.8,
+  fontSize: "14px",
   opacity: 1,
 };
 
