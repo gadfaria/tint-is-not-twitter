@@ -63,7 +63,7 @@ const placeholderStyle: MotionStyle = {
 };
 
 const initialPlaceholderState: TargetAndTransition = {
-  y: -3,
+  y: -1,
   fontSize: "17px",
   opacity: 0.6,
 };
