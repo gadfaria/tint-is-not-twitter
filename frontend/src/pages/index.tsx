@@ -2,9 +2,12 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/dist/client/router";
+import { useState } from "react";
 import { TintLogo } from "../assets/logo";
+import Modal from "../components/Modal";
 import SeoHead from "../components/SeoHead";
 import StyledButton from "../components/StyledButton";
+import CreateUserModal from "../components/FirstPage/CreateUserModal";
 
 const Container = styled.div`
   width: 100vw;
@@ -52,6 +55,7 @@ const ButtonSize = css`
 
 export default function FirstPage() {
   const router = useRouter();
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
 
   return (
     <>
@@ -65,15 +69,16 @@ export default function FirstPage() {
           <Title>Acontecendo agora</Title>
           <SubTitle>Inscreva-se no Tint hoje mesmo</SubTitle>
           <StyledButton
-            css={css`
+            customCss={css`
               ${ButtonSize};
               margin: 33px 0px 22px 0px;
             `}
+            onClick={() => setShowCreateUserModal(true)}
           >
             Inscreva-se
           </StyledButton>
           <StyledButton
-            css={ButtonSize}
+            customCss={ButtonSize}
             inverted
             onClick={() => router.push("/login")}
           >
@@ -81,6 +86,16 @@ export default function FirstPage() {
           </StyledButton>
         </RighColumn>
       </Container>
+      <Modal
+        showModal={showCreateUserModal}
+        closeModal={() => setShowCreateUserModal(false)}
+        customCss={css`
+          width: 600px;
+          height: 420px;
+        `}
+      >
+        <CreateUserModal />
+      </Modal>
     </>
   );
 }

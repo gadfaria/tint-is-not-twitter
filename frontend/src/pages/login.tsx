@@ -2,6 +2,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { LoginApi } from "../apis/LoginAPI";
 import { TintLogo } from "../assets/logo";
 import StyledButton from "../components/StyledButton";
 import StyledInput from "../components/StyledInput";
@@ -38,6 +39,10 @@ const InputSize = css`
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  async function handleClick() {
+    const newUser = await LoginApi({ username, password });
+  }
   return (
     <Container>
       <div>
@@ -57,11 +62,13 @@ export default function Login() {
           placeholder="Senha"
           value={password}
           onChange={(vle) => setPassword(vle.target.value)}
+          type="password"
         />
 
         <StyledButton
-          css={ButtonSize}
+          customCss={ButtonSize}
           disabled={username === "" || password === ""}
+          onClick={handleClick}
         >
           Entrar
         </StyledButton>

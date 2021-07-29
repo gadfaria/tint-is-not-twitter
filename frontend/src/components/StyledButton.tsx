@@ -1,4 +1,5 @@
-import { css } from "@emotion/react";
+/** @jsxImportSource @emotion/react */
+import { css, SerializedStyles } from "@emotion/react";
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 import React, {
@@ -7,15 +8,6 @@ import React, {
   PropsWithChildren,
 } from "react";
 import { notSelect } from "../styles/general";
-
-export interface Props
-  extends DetailedHTMLProps<
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  > {
-  inverted?: boolean;
-  isLoading?: boolean;
-}
 
 const InvertedColors = css`
   background-color: white;
@@ -84,12 +76,27 @@ const spinTransition = {
   duration: 1,
 };
 
+export interface Props
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
+  inverted?: boolean;
+  isLoading?: boolean;
+  customCss?: SerializedStyles;
+}
+
 export default function StyledButton(
   props: PropsWithChildren<Props>
 ): JSX.Element {
-  const { children, isLoading, disabled } = props;
+  const { children, isLoading, disabled, customCss } = props;
   return (
-    <Button {...props} type="button" disabled={disabled || isLoading}>
+    <Button
+      {...props}
+      type="button"
+      disabled={disabled || isLoading}
+      css={customCss}
+    >
       {!isLoading ? (
         children
       ) : (

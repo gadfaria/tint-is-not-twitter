@@ -1,85 +1,77 @@
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import React, { useState } from "react";
+import { UserApi } from "../../apis/UserAPI";
+import StyledButton from "../StyledButton";
+import StyledInput from "../StyledInput";
 
-const BackdropDiv = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
+const Container = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 30px;
 `;
 
-const ModalDiv = styled(motion.div)`
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  background: white;
-  border-radius: 10px;
-  text-align: center;
+const Title = styled.div`
+  color: #0f1419;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 28px;
+  text-align: left;
+  margin-bottom: 30px;
 `;
 
-const ButtonDiv = styled.button`
-  color: #444;
-  border-color: #444;
-  font-weight: bold;
-  margin-top: 20px;
+const InputSize = css`
+  width: 100%;
 `;
 
-const TextDiv = styled.p`
-  color: #444;
-  font-weight: bold;
+const ButtonSize = css`
+  height: 48px;
 `;
 
-const BackdropAnimation = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
+export default function CreateUserModal(props: any) {
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
 
-const ModalAnimation = {
-  hidden: { y: "30vh", opacity: 0 },
-  visible: {
-    y: "30vh",
-    opacity: 1,
-    transition: { delay: 0.5 },
-  },
-};
+  async function handleClick() {
+    const newUser = await UserApi.create({ name, password, username });
+  }
 
-interface Props {
-  showModal: boolean;
-  closeModal: Function;
-  text: string;
-}
-
-export default function Modal(props: Props) {
   return (
-    <AnimatePresence>
-      {props.showModal && (
-        <BackdropDiv
-          onClick={() => {
-            console.log("aa");
-          }}
-          variants={BackdropAnimation}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-        >
-          <ModalDiv variants={ModalAnimation}>
-            <TextDiv>
-              Teste do modal <br /> valor do input: {props.text}
-            </TextDiv>
-            <ButtonDiv
-              onClick={() => {
-                props.closeModal();
-              }}
-            >
-              Botaozao maneiro
-            </ButtonDiv>
-          </ModalDiv>
-        </BackdropDiv>
-      )}
-    </AnimatePresence>
+    <Container>
+      <Title>Criar sua conta</Title>
+      <StyledInput
+        customCss={InputSize}
+        placeholder="Nome"
+        value={name}
+        onChange={(vle) => setName(vle.target.value)}
+      />
+      <StyledInput
+        customCss={css`
+          margin: 28px 0px;
+          ${InputSize}
+        `}
+        placeholder="Username"
+        value={username}
+        onChange={(vle) => setUsername(vle.target.value)}
+      />
+      <StyledInput
+        customCss={css`
+          margin-bottom: 28px;
+          ${InputSize};
+        `}
+        placeholder="Senha"
+        value={password}
+        onChange={(vle) => setPassword(vle.target.value)}
+        type="password"
+      />
+
+      <StyledButton customCss={ButtonSize} onClick={handleClick}>
+        Inscrever-se
+      </StyledButton>
+    </Container>
   );
 }

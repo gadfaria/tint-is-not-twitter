@@ -86,8 +86,8 @@ interface Props
 
 export default function StyledInput(props: Props) {
   const { value, placeholder, customCss } = props;
-
   let [inputFocus, setInputFocus] = useState(false);
+
   return (
     <Container
       isFocused={inputFocus}
