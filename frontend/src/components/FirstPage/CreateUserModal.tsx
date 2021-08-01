@@ -1,8 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { useAtom } from "jotai";
+import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
 import { UserApi } from "../../apis/UserAPI";
+import { userAtom } from "../../atom/UserAtom";
+import { localStorageSetItem } from "../../utils/localStorage";
 import StyledButton from "../StyledButton";
 import StyledInput from "../StyledInput";
 
@@ -32,12 +36,19 @@ const ButtonSize = css`
 `;
 
 export default function CreateUserModal(props: any) {
+  const [, setUser] = useAtom(userAtom);
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const router = useRouter();
 
   async function handleClick() {
     const newUser = await UserApi.create({ name, password, username });
+    if (!newUser) return;
+    setUser(newUser);
+    localStorageSetItem("ACCESS_TOKEN", newUser.accessToken);
+    router.push("/home");
   }
 
   return (
@@ -69,7 +80,11 @@ export default function CreateUserModal(props: any) {
         type="password"
       />
 
-      <StyledButton customCss={ButtonSize} onClick={handleClick}>
+      <StyledButton
+        customCss={ButtonSize}
+        onClick={handleClick}
+        isLoading={isLoading}
+      >
         Inscrever-se
       </StyledButton>
     </Container>

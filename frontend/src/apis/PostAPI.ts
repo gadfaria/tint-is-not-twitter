@@ -1,14 +1,17 @@
-import { SERVER_URL } from "../config.json";
-import { CreateUserBody, User } from "../types/UserTypes";
 import { toast } from "react-toastify";
+import { SERVER_URL } from "../config.json";
+import { CreatePostBody, IPost } from "../types/PostTypes";
+import { User } from "../types/UserTypes";
 import { localStorageGetItem } from "../utils/localStorage";
 
-async function create(body: CreateUserBody): Promise<User | null> {
-  const response = await fetch(`${SERVER_URL}/user`, {
+async function create(body: CreatePostBody): Promise<IPost | null> {
+  const accessToken = localStorageGetItem("ACCESS_TOKEN");
+  const response = await fetch(`${SERVER_URL}/post`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",
+      Authorization: "Bearer " + accessToken,
     },
     body: JSON.stringify(body),
   });
@@ -22,9 +25,9 @@ async function create(body: CreateUserBody): Promise<User | null> {
   }
 }
 
-export async function get(): Promise<User | null> {
+export async function get(): Promise<IPost[] | null> {
   const accessToken = localStorageGetItem("ACCESS_TOKEN");
-  const response: Response = await fetch(`${SERVER_URL}/user`, {
+  const response: Response = await fetch(`${SERVER_URL}/post`, {
     headers: {
       Authorization: "Bearer " + accessToken,
     },
@@ -39,7 +42,7 @@ export async function get(): Promise<User | null> {
   }
 }
 
-export const UserApi = {
+export const PostApi = {
   create,
   get,
 };

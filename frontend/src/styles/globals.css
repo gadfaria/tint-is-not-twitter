@@ -49,3 +49,15 @@ a {
 html {
   background: var(--primary);
 }
+
+/* CSS for Tiptap */
+/* Placeholder (at the top) */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color:#0f141990;
+  font-size:20px;
+  line-height:24px;
+  pointer-events: none;
+  height: 0;
+}

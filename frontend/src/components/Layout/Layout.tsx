@@ -7,7 +7,7 @@ import MenuBar from "./MenuBar";
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 0.7fr 600px 1fr;
+  grid-template-columns: 0.8fr 600px 1fr;
   height: 100vh;
 `;
 

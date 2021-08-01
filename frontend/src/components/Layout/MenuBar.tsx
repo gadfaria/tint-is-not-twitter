@@ -1,10 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { useAtom } from "jotai";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import HomeIcon from "../../assets/home";
 import { TintLogo } from "../../assets/logo";
 import PerfilIcon from "../../assets/perfil";
+import { userAtom } from "../../atom/UserAtom";
 import StyledButton from "../StyledButton";
 
 export const Container = styled.div`
@@ -14,6 +17,7 @@ export const Container = styled.div`
   width: 100%;
   min-height: 100%;
   justify-content: space-between;
+  padding: 0px 32px;
 `;
 
 const Menu = styled.nav`
@@ -40,7 +44,7 @@ const MenuButton = styled.div<{ isActive?: boolean }>`
   padding: 12px 16px;
   border-radius: 50px;
   width: fit-content;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.2s, color 0.2s;
 
   ${(props) =>
     props.isActive &&
@@ -51,7 +55,7 @@ const MenuButton = styled.div<{ isActive?: boolean }>`
   svg {
     g {
       path {
-        transition: fill 0.3s;
+        transition: fill 0.2s;
       }
     }
   }
@@ -68,7 +72,7 @@ const MenuText = styled.div`
   margin: 0px 13px;
 `;
 
-const ButtonCss = css`
+const ButtonSize = css`
   width: 226px;
   height: 48px;
 `;
@@ -76,7 +80,7 @@ const ButtonCss = css`
 const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.2s, color 0.2s;
   cursor: pointer;
   width: fit-content;
   margin: 10px;
@@ -108,7 +112,9 @@ const Profile = styled.div`
 
 export default function MenuBar() {
   const router = useRouter();
+  const [user] = useAtom(userAtom);
 
+  if (!user) return <></>;
   return (
     <Container>
       <Menu>
@@ -116,24 +122,38 @@ export default function MenuBar() {
           <TintLogo height="40px" width="40px" />
         </MenuButton>
 
-        <MenuButton isActive={router.asPath === "/home"}>
-          <HomeIcon height="30" width="30" />
+        <MenuButton
+          isActive={router.asPath === "/home"}
+          onClick={() => router.push("/home")}
+        >
+          <HomeIcon
+            height="30"
+            width="30"
+            isActive={router.asPath === "/home"}
+          />
           <MenuText>Página Inicial</MenuText>
         </MenuButton>
 
-        <MenuButton>
-          <PerfilIcon height="30" width="30" />
+        <MenuButton
+          isActive={router.asPath === "/tt"}
+          onClick={() => router.push("/tt")}
+        >
+          <PerfilIcon
+            height="30"
+            width="30"
+            isActive={router.asPath === "/tt"}
+          />
           <MenuText>Perfil</MenuText>
         </MenuButton>
 
-        <StyledButton customCss={ButtonCss}>Tweetar</StyledButton>
+        <StyledButton customCss={ButtonSize}>Tweetar</StyledButton>
       </Menu>
 
       <ProfileDiv>
         <Avatar />
         <Profile>
-          <strong>Mateus de Souza</strong>
-          <span>@mateussp97</span>
+          <strong>{user.name}</strong>
+          <span>@{user.username}</span>
         </Profile>
       </ProfileDiv>
     </Container>

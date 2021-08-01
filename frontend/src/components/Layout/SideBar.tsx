@@ -15,7 +15,7 @@ export const Body = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 60px 24px 200px;
+  padding: 60px 32px 200px;
   margin-top: 4px;
 
   > div + div {

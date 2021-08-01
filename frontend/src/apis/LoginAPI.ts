@@ -1,8 +1,10 @@
-import Configs from "../config.json";
-import { LoginBody } from "../types/LoginType";
+import { SERVER_URL } from "../config.json";
+import { LoginBody } from "../types/LoginTypes";
+import { User } from "../types/UserTypes";
+import { toast } from "react-toastify";
 
-export async function LoginApi(body: LoginBody) {
-  const response = await fetch(`${Configs.SERVER_URL}/login`, {
+export async function LoginApi(body: LoginBody): Promise<User | null> {
+  const response = await fetch(`${SERVER_URL}/login`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -10,4 +12,12 @@ export async function LoginApi(body: LoginBody) {
     },
     body: JSON.stringify(body),
   });
+
+  const responseObj = await response.json();
+  if (response.status === 200) {
+    return responseObj.data;
+  } else {
+    toast(responseObj.error.message, { type: "error" });
+    return null;
+  }
 }

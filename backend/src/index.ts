@@ -7,6 +7,7 @@ import { initMQTTServer } from "./services/MQTTServer";
 import { initMQTTClient } from "./services/MQTTClient";
 import { initPrisma } from "./services/initPrisma";
 import { initLoginRoutes } from "./routes/Login";
+import { initPostRoutes } from "./routes/Post";
 
 const Configs = require("../config.json");
 
@@ -38,6 +39,10 @@ async function main() {
     {
       init: initLoginRoutes,
       prefix: "/login",
+    },
+    {
+      init: initPostRoutes,
+      prefix: "/post",
     },
   ];
 

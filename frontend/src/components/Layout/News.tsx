@@ -8,6 +8,7 @@ const Container = styled.a`
   line-height: 20px;
   cursor: pointer;
 
+  transition: opacity 0.2s;
   :hover {
     opacity: 0.5;
   }

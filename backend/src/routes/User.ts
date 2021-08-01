@@ -44,6 +44,7 @@ export function initUserRoutes(app: FastifyApp, { prisma }: Services) {
           ...req.body,
           password: passwordWithHash,
           accessToken,
+          createdAt: new Date(),
         },
       });
 
