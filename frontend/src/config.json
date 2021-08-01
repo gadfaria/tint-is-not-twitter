@@ -1,3 +1,4 @@
 {
-  "SERVER_URL": "http://localhost:6680"
+  "SERVER_URL": "http://localhost:6680",
+  "NEWS_API": "3bf1bf6572fc429eb4cd2d433061f9f4"
 }

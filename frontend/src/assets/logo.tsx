@@ -7,8 +7,7 @@ interface Props {
   color?: string;
 }
 
-export function TintLogo(props: Props) {
-  const { color, height, width } = props;
+export function TintLogo({ color, height, width }: Props) {
   return (
     <div
       css={css`
