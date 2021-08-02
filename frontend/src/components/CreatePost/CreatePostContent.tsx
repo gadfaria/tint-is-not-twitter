@@ -4,7 +4,9 @@ import styled from "@emotion/styled";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { defaultExtensions } from "@tiptap/starter-kit";
+import { useAtom } from "jotai";
 import { PostApi } from "../../apis/PostAPI";
+import { postsAtom } from "../../atom/PostsAtom";
 import { styledScrollBar } from "../../styles/general";
 import StyledButton from "../StyledButton";
 
@@ -56,6 +58,8 @@ const ButtonSize = css`
 `;
 
 export default function CreatePostContent() {
+  const [, setPosts] = useAtom(postsAtom);
+
   const editor = useEditor({
     extensions: [
       ...defaultExtensions(),
@@ -125,6 +129,9 @@ export default function CreatePostContent() {
 
   async function handleClick() {
     const newPost = await PostApi.create({ content: editor!.getHTML() });
+    if (!newPost) return;
+
+    setPosts((posts) => [newPost, ...posts]);
   }
 
   if (!editor) return <></>;

@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { PostApi } from "../apis/PostAPI";
 import { IPost } from "../types/PostTypes";
 import Post from "../components/Post";
+import { postsAtom } from "../atom/PostsAtom";
+import { css } from "@emotion/react";
 
 const Wrapper = styled.div`
   width: 600px;
@@ -28,9 +30,20 @@ const CreatePostDiv = styled.div`
   border-top: none;
 `;
 
+const Posts = styled.div`
+  border-top: 1px solid #dbdbdb70;
+`;
+
+const Gray = styled.div`
+  border-right: 1px solid #dbdbdb70;
+  border-left: 1px solid #dbdbdb70;
+  height: 12px;
+  background: rgb(247, 249, 249);
+`;
+
 export default function Home() {
   const [user] = useAtom(userAtom);
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useAtom(postsAtom);
 
   useEffect(() => {
     (async () => {
@@ -51,9 +64,12 @@ export default function Home() {
           <CreatePostDiv>
             <CreatePostContent />
           </CreatePostDiv>
-          {posts.map((p) => (
-            <Post post={p} />
-          ))}
+          <Gray />
+          <Posts>
+            {posts.map((p) => (
+              <Post post={p} />
+            ))}
+          </Posts>
         </Wrapper>
       </Layout>
     </>

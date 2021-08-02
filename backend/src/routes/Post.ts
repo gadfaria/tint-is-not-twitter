@@ -26,7 +26,7 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
         data: { ...body, authorId: user.id, createdAt: new Date() },
       });
 
-      SendSuccess(res, 200, post);
+      SendSuccess(res, 200, { ...post, user });
     }
   );
 
@@ -44,7 +44,12 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
       let user = await prisma.user.findUnique({ where: { accessToken } });
       if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
 
-      const posts = await prisma.post.findMany();
+      const posts = await prisma.post.findMany({
+        orderBy: [{ createdAt: "desc" }],
+        include: {
+          user: true,
+        },
+      });
       SendSuccess(res, 200, posts);
     }
   );

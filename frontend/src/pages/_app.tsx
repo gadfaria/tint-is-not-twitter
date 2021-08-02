@@ -14,6 +14,7 @@ import { NEWS_API } from "../config.json";
 import "../styles/globals.css";
 import { News } from "../types/NewsTypes";
 import { localStorageClear, localStorageGetItem } from "../utils/localStorage";
+
 dayjs.extend(relativeTime);
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -40,9 +41,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       localStorageClear();
       router.push("/");
     })();
-
-    const userUid = localStorageGetItem("ACCESS_TOKEN");
-    if (router.asPath === "/" && userUid) router.push("/home");
   }, []);
 
   useEffect(() => {

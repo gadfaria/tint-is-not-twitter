@@ -5,6 +5,7 @@ export type IPost = {
   user: User;
   content: string;
   authorId: string;
+  createdAt: Date;
 };
 
 export type CreatePostBody = { content: string };
