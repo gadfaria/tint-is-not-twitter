@@ -577,12 +577,12 @@
         "affectsGlobalScope": false
       },
       "./node_modules/.prisma/client/index.d.ts": {
-        "version": "e50cfd80dd60adea0f581f2d483f44442a64ec8fb1e2e4608372b9022eed17a1",
-        "signature": "e50cfd80dd60adea0f581f2d483f44442a64ec8fb1e2e4608372b9022eed17a1",
+        "version": "db7063b24bb8f4bb18b17cd6666e1e69c76491cd33c05cb9895185e2f3308977",
+        "signature": "db7063b24bb8f4bb18b17cd6666e1e69c76491cd33c05cb9895185e2f3308977",
         "affectsGlobalScope": false
       },
       "./src/services/initPrisma.ts": {
-        "version": "7f7609b6d6fbee19b0380f4570068998b8748e8b93067a823d70a83d802326b4",
+        "version": "f223e52569978c4e3f2c208edf1152fef74a94e3d6e3379ea5ebc007452be518",
         "signature": "cb5cd4f8203c344431353a5d12c1b639dfdd78909b6876036bd6ba474e4c9184",
         "affectsGlobalScope": false
       },
@@ -652,8 +652,8 @@
         "affectsGlobalScope": false
       },
       "./src/utils/Errors.ts": {
-        "version": "9484c63e0a9e0c3f5bf77a73c1a8c1b961c87bd826411db11a62d9a52c6e9951",
-        "signature": "59074c37adff5a71df7cea6b8fc2132dd3f081db4fe00b25ea60898d76903b20",
+        "version": "4a8ce0b3c38a037d8129542f5e3548041f2ab3c7eb42ff93594fbd6eab0accc9",
+        "signature": "509cc089c0ab58d203aebb37fcf8fa80642189cebc2aaabed027dcef66cb47bf",
         "affectsGlobalScope": false
       },
       "./src/routes/User.ts": {
@@ -737,12 +737,12 @@
         "affectsGlobalScope": false
       },
       "./src/types/PostTypes.d.ts": {
-        "version": "be2d821706c855bf730255ac3e5a761f9c32b96819f3635ba8afb8897512c063",
-        "signature": "be2d821706c855bf730255ac3e5a761f9c32b96819f3635ba8afb8897512c063",
+        "version": "87dfc2efaca135d7f8f84f13a72bc9bd32533fc2a62420f5580326ef8feb9548",
+        "signature": "87dfc2efaca135d7f8f84f13a72bc9bd32533fc2a62420f5580326ef8feb9548",
         "affectsGlobalScope": false
       },
       "./src/routes/Post.ts": {
-        "version": "bc7d9c74ec48e3e2082932b9b1bd3aed72994efeb470333406ebac09cfbba2ba",
+        "version": "a736f1876ce9b373f6b0c1a6e7568cba64bd57777b1d4b957f7f2e32e4e243f5",
         "signature": "8a46d55a2fd3405f2e1a36258e3bac84742fc622b0111ea9274099d8054ef2d2",
         "affectsGlobalScope": false
       },
@@ -1192,6 +1192,7 @@
         "./src/utils/HttpResponse.ts"
       ],
       "./src/routes/Post.ts": [
+        "./node_modules/@prisma/client/index.d.ts",
         "./src/types/PostTypes.d.ts",
         "./src/types/common.ts",
         "./src/utils/Errors.ts",

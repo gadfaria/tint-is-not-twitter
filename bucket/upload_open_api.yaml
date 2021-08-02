@@ -1,0 +1,104 @@
+swagger: "2.0"
+info:
+  title: Bucket API
+  description: Documentation for the Bucket API
+  version: v0.1.0
+schemes:
+  - https
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+definitions:
+  User:
+    description: "For constructing schemas, check:"
+    type: object
+    properties:
+      name:
+        type: string
+securityDefinitions:
+  apiKey:
+    type: apiKey
+    name: apiKey
+    in: header
+paths:
+  /file:
+    post:
+      summary: Uploads a file.
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          description: The file to upload.
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+        "500":
+          description: "No file provided"
+
+  /file/compressed:
+    post:
+      summary: Uploads an image file, if it's different from JPG converts it optimizing. Also creates a thumbnail for it.
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          description: The image to upload.
+
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+        "500":
+          description: "No file provided"
+
+  /file/{id}:
+    get:
+      summary: 'Get file. You can request it''s thumbnail with the querystring "?thumb=true"'
+      description: ""
+      produces:
+        - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "The id of the file, with extension"
+          required: true
+          type: "string"
+
+        - in: query
+          name: thumb
+          schema:
+            type: boolean
+          description: If it's the thumbnail version of the image
+      responses:
+        "200":
+          description: "File served"
+
+    delete:
+      summary: "Delete file"
+      description: ""
+      produces:
+        - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "The id of the file, with extension"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "File served"

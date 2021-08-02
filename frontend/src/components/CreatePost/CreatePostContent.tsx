@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import { PostApi } from "../../apis/PostAPI";
 import { postsAtom } from "../../atom/PostsAtom";
 import { styledScrollBar } from "../../styles/general";
+import { IPost } from "../../types/PostTypes";
 import StyledButton from "../StyledButton";
 
 const Container = styled.div`
@@ -57,7 +58,11 @@ const ButtonSize = css`
   height: 40px;
 `;
 
-export default function CreatePostContent() {
+type Props = {
+  post?: IPost;
+};
+
+export default function CreatePostContent({ post }: Props) {
   const [, setPosts] = useAtom(postsAtom);
 
   const editor = useEditor({
@@ -124,14 +129,24 @@ export default function CreatePostContent() {
       //     },
       //   }),
     ],
-    content: ``,
+    content: post ? post.content : "",
   });
 
   async function handleClick() {
-    const newPost = await PostApi.create({ content: editor!.getHTML() });
-    if (!newPost) return;
+    if (!post) {
+      const newPost = await PostApi.create({ content: editor!.getHTML() });
+      if (!newPost) return;
 
-    setPosts((posts) => [newPost, ...posts]);
+      setPosts((posts) => [newPost, ...posts]);
+    } else {
+      await PostApi.update(
+        {
+          content: editor!.getHTML(),
+          authorId: post.author.id,
+        },
+        post.id
+      );
+    }
   }
 
   if (!editor) return <></>;
@@ -153,7 +168,7 @@ export default function CreatePostContent() {
       </Wrapper>
       <Bottom>
         <StyledButton css={ButtonSize} onClick={handleClick}>
-          Tweetar
+          {post ? "Editar" : "Tweetar"}
         </StyledButton>
       </Bottom>
     </Container>

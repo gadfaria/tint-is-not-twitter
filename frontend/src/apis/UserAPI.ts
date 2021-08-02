@@ -22,7 +22,7 @@ async function create(body: CreateUserBody): Promise<User | null> {
   }
 }
 
-export async function get(): Promise<User | null> {
+async function get(): Promise<User | null> {
   const accessToken = localStorageGetItem("ACCESS_TOKEN");
   const response: Response = await fetch(`${SERVER_URL}/user`, {
     headers: {

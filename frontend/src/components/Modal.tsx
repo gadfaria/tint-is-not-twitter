@@ -24,7 +24,6 @@ const ModalDiv = styled(motion.div)`
   margin: 0 auto;
   background: white;
   border-radius: 10px;
-  text-align: center;
 `;
 
 const BackdropAnimation = {

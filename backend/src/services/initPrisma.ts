@@ -14,14 +14,32 @@ export async function initPrisma(mqttClient: Services["mqttClient"]) {
   prisma.$use(async (params: any, next: any) => {
     const result = await next(params);
 
-    if (params.action === "update") {
-      if (params.model === "User") {
+    if (params.action === "create") {
+      if (params.model === "Like") {
         mqttClient.publish(
-          `user/${params.args.where.id}`,
-          JSON.stringify({ user: result })
+          `post/${result.postId}`,
+          JSON.stringify({ code: "LIKE", message: result })
         );
       }
     }
+
+    if (params.action === "update") {
+      if (params.model === "Post") {
+        mqttClient.publish(
+          `post/${result.id}`,
+          JSON.stringify({ code: "EDIT", message: { content: result.content } })
+        );
+      }
+    }
+
+    // if (params.action === "update") {
+    //   if (params.model === "User") {
+    //   mqttClient.publish(
+    //     `user/${params.args.where.id}`,
+    //     JSON.stringify({ user: result })
+    //   );
+    // }
+    // }
 
     // if (params.action === "create" || params.action === "update") {
     //   // if (params.model === "Comment") {

@@ -8,7 +8,7 @@ import CreatePostContent from "../components/CreatePost/CreatePostContent";
 import { useEffect, useState } from "react";
 import { PostApi } from "../apis/PostAPI";
 import { IPost } from "../types/PostTypes";
-import Post from "../components/Post";
+import Post from "../components/Post/Post";
 import { postsAtom } from "../atom/PostsAtom";
 import { css } from "@emotion/react";
 
@@ -67,7 +67,7 @@ export default function Home() {
           <Gray />
           <Posts>
             {posts.map((p) => (
-              <Post post={p} />
+              <Post key={p.id} post={p} userId={user.id} />
             ))}
           </Posts>
         </Wrapper>

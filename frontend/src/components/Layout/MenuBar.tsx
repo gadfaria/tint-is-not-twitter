@@ -3,11 +3,13 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { useAtom } from "jotai";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
+import React, { useState } from "react";
 import HomeIcon from "../../assets/home";
 import { TintLogo } from "../../assets/logo";
 import PerfilIcon from "../../assets/perfil";
 import { userAtom } from "../../atom/UserAtom";
+import Modal from "../Modal";
+import PostModal from "../Post/PostModal";
 import StyledButton from "../StyledButton";
 
 export const Container = styled.div`
@@ -113,10 +115,21 @@ const Profile = styled.div`
 export default function MenuBar() {
   const router = useRouter();
   const [user] = useAtom(userAtom);
+  const [showModal, setShowModal] = useState(false);
 
   if (!user) return <></>;
   return (
     <Container>
+      <Modal
+        showModal={showModal}
+        closeModal={() => setShowModal(false)}
+        customCss={css`
+          width: 600px;
+          max-height: 420px;
+        `}
+      >
+        <PostModal />
+      </Modal>
       <Menu>
         <MenuButton>
           <TintLogo height="40px" width="40px" />
@@ -146,7 +159,9 @@ export default function MenuBar() {
           <MenuText>Perfil</MenuText>
         </MenuButton>
 
-        <StyledButton customCss={ButtonSize}>Tweetar</StyledButton>
+        <StyledButton customCss={ButtonSize} onClick={() => setShowModal(true)}>
+          Tweetar
+        </StyledButton>
       </Menu>
 
       <ProfileDiv>

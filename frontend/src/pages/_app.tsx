@@ -14,8 +14,13 @@ import { NEWS_API } from "../config.json";
 import "../styles/globals.css";
 import { News } from "../types/NewsTypes";
 import { localStorageClear, localStorageGetItem } from "../utils/localStorage";
-
+import mqtt from "mqtt";
 dayjs.extend(relativeTime);
+
+
+
+export const mqttClient = mqtt.connect("ws://localhost:8888");
+mqttClient.on("connect", () => console.log("Connected MQTT!"));
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [, setNews] = useAtom(newsAtom);
