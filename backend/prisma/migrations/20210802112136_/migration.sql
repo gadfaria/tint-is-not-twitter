@@ -5,6 +5,7 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "accessToken" TEXT NOT NULL,
+    "avatar" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL
 );
 
@@ -13,8 +14,17 @@ CREATE TABLE "Like" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "postId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL,
     FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Image" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "postId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL,
+    FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable

@@ -16,7 +16,7 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
       },
     },
     async (req, res) => {
-      const { body } = req;
+      const { content, images } = req.body;
 
       const { authorization } = req.headers;
       const accessToken = (authorization as string).split(" ")[1];
@@ -24,10 +24,19 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
       if (!author) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
 
       const post = await prisma.post.create({
-        data: { ...body, authorId: author.id, createdAt: new Date() },
+        data: { content, authorId: author.id, createdAt: new Date() },
       });
 
-      SendSuccess(res, 200, { ...post, author, likes: [] });
+      await Promise.all(
+        images.map(
+          async (i) =>
+            await prisma.image.create({
+              data: { createdAt: new Date(), postId: post.id, id: i },
+            })
+        )
+      );
+
+      SendSuccess(res, 200, { ...post, author, likes: [], images });
     }
   );
 
@@ -50,6 +59,7 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
         include: {
           author: true,
           likes: true,
+          images: true,
         },
       });
 
@@ -59,6 +69,7 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
         createdAt: p.createdAt,
         author: p.author,
         likes: p.likes.map((l) => l.userId),
+        images: p.images.map((i) => i.id),
       }));
 
       SendSuccess(res, 200, postsResponse);
@@ -114,7 +125,7 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
       if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
 
       const like = await prisma.like.create({
-        data: { postId, userId: user.id },
+        data: { postId, userId: user.id, createdAt: new Date() },
       });
 
       SendSuccess(res, 200, like);

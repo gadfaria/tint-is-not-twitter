@@ -218,7 +218,7 @@
       },
       "./src/Api.ts": {
         "version": "4a75cc2449fdb026fd0177041ce2b0e8d3cbb26d66e59f194b74a55a9d5fd173",
-        "signature": "c55940214c94889492e7975d6dbce025b5ad6981a1d3f31806a9bd33235652d2",
+        "signature": "1611adab9cba964b9d3eecea1c7c9e077c1c211bb87cb03e1c7863ccb7809592",
         "affectsGlobalScope": false
       },
       "./node_modules/light-my-request/index.d.ts": {
@@ -577,8 +577,8 @@
         "affectsGlobalScope": false
       },
       "./node_modules/.prisma/client/index.d.ts": {
-        "version": "db7063b24bb8f4bb18b17cd6666e1e69c76491cd33c05cb9895185e2f3308977",
-        "signature": "db7063b24bb8f4bb18b17cd6666e1e69c76491cd33c05cb9895185e2f3308977",
+        "version": "3eea50c7cbf0484f39939a49483d9096bddf4f33a75e9abfb748ebaef7b23bbd",
+        "signature": "3eea50c7cbf0484f39939a49483d9096bddf4f33a75e9abfb748ebaef7b23bbd",
         "affectsGlobalScope": false
       },
       "./src/services/initPrisma.ts": {
@@ -657,7 +657,7 @@
         "affectsGlobalScope": false
       },
       "./src/routes/User.ts": {
-        "version": "e45d20ef2928fea772aa03d4f5162baa4e41e1ee388184cd2c00c7fe2e695f6d",
+        "version": "200ed5943ecdb10accc408a46df847fa8d7fefacb65bb00a5311700a27712410",
         "signature": "b2152a31cf347c6ec77818dd9c882a608f4940badbb6c3f3fdf60396f369670e",
         "affectsGlobalScope": false
       },
@@ -737,12 +737,12 @@
         "affectsGlobalScope": false
       },
       "./src/types/PostTypes.d.ts": {
-        "version": "87dfc2efaca135d7f8f84f13a72bc9bd32533fc2a62420f5580326ef8feb9548",
-        "signature": "87dfc2efaca135d7f8f84f13a72bc9bd32533fc2a62420f5580326ef8feb9548",
+        "version": "f17ba5dbb9f9dba5b49a1fc6e5eacc2570643c565d8bd6f99ffbccf8a39a390c",
+        "signature": "f17ba5dbb9f9dba5b49a1fc6e5eacc2570643c565d8bd6f99ffbccf8a39a390c",
         "affectsGlobalScope": false
       },
       "./src/routes/Post.ts": {
-        "version": "a736f1876ce9b373f6b0c1a6e7568cba64bd57777b1d4b957f7f2e32e4e243f5",
+        "version": "003dbf74f60dde4de094f1413a43489dbc9ef492a7ff5ce1bef8dc9ba6ae44c7",
         "signature": "8a46d55a2fd3405f2e1a36258e3bac84742fc622b0111ea9274099d8054ef2d2",
         "affectsGlobalScope": false
       },

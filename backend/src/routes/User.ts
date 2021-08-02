@@ -42,6 +42,7 @@ export function initUserRoutes(app: FastifyApp, { prisma }: Services) {
       let user = await prisma.user.create({
         data: {
           ...req.body,
+          avatar: "",
           password: passwordWithHash,
           accessToken,
           createdAt: new Date(),
