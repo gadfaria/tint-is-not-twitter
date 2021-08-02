@@ -5,11 +5,16 @@ import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { PostApi } from "../../apis/PostAPI";
 import ThreePointsIcon from "../../assets/threepoints";
-import useClickOutside from "../../hooks/useClickOutside";
+import { BUCKET_URL } from "../../config.json";
 import { mqttClient } from "../../pages/_app";
 import { styledScrollBar } from "../../styles/general";
 import { IPost } from "../../types/PostTypes";
+import ImgGrid, { ImageGridCounter, Img } from "../ImgGrid";
 import PostPopover from "./PostPopver";
+
+//@ts-ignore
+// import __Spotlight from "spotlight.js/src/js/spotlight.js";
+// import "spotlight.js/dist/css/spotlight.min.css";
 
 const Container = styled.div`
   overflow-y: auto;
@@ -71,6 +76,8 @@ type Props = {
 };
 
 export default function Post({ post: postFromProps, userId }: Props) {
+  // const Spotlight = __Spotlight;
+
   const [post, setPost] = useState(postFromProps);
   const [showPopover, setShowPopover] = useState(false);
   const [likeAction, setLikeAction] = useState(post.likes.includes(userId));
@@ -140,10 +147,59 @@ export default function Post({ post: postFromProps, userId }: Props) {
               __html: post.content,
             }}
           />
+          {post.images && post.images.length > 0 && (
+            <ImgGrid
+              count={post.images.length}
+              css={css`
+                margin-bottom: 10px;
+              `}
+            >
+              {post.images.map((image: string, index) => {
+                if (index >= 4) return null;
+                return (
+                  <Img
+                    className={index === 0 ? "first" : ""}
+                    key={image}
+                    src={`${BUCKET_URL}/file/${image}`}
+                    onClick={() => {
+                      // Spotlight.show(
+                      //   post.images.map((image) => ({
+                      //     src: `${BUCKET_URL}/file/${image}`,
+                      //   }))
+                      // );
+                    }}
+                  />
+                );
+              })}
+              {post.images.length > 4 && (
+                <ImageGridCounter
+                  onClick={() => {
+                    {
+                      // Spotlight.show(
+                      //   post.images.map((image) => ({
+                      //     src: `${BUCKET_URL}/file/${image}`,
+                      //   }))
+                      // );
+                    }
+                  }}
+                  className="noselect"
+                >
+                  + {post.images.length - 3}
+                </ImageGridCounter>
+              )}
+            </ImgGrid>
+          )}
         </div>
       </Wrapper>
 
-      <Bottom>
+      <Bottom
+        css={css`
+          ${post.images.length > 0 &&
+          css`
+            margin-top: 3px;
+          `}
+        `}
+      >
         <div
           onClick={handleLike}
           className={`hearth ${likeAction && "animate"}`}

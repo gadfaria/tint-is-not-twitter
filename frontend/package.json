@@ -20,10 +20,12 @@
     "framer-motion": "^4.1.17",
     "jotai": "^1.2.2",
     "mqtt": "^4.2.8",
+    "nanoid": "^3.1.23",
     "next": "11.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-toastify": "^7.0.4",
+    "spotlight.js": "^0.7.8",
     "tippy": "^0.0.0"
   },
   "devDependencies": {

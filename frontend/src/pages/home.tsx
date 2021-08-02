@@ -1,16 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
 import { useAtom } from "jotai";
-import { userAtom } from "../atom/UserAtom";
-import Layout from "../components/Layout/Layout";
-import SeoHead from "../components/SeoHead";
-import CreatePostContent from "../components/CreatePost/CreatePostContent";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PostApi } from "../apis/PostAPI";
-import { IPost } from "../types/PostTypes";
-import Post from "../components/Post/Post";
 import { postsAtom } from "../atom/PostsAtom";
-import { css } from "@emotion/react";
+import { userAtom } from "../atom/UserAtom";
+import CreatePostContent from "../components/CreatePost/CreatePostContent";
+import Layout from "../components/Layout/Layout";
+import Post from "../components/Post/Post";
+import SeoHead from "../components/SeoHead";
 
 const Wrapper = styled.div`
   width: 600px;

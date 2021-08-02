@@ -7,6 +7,7 @@ import PostModal from "./PostModal";
 import { useState } from "react";
 import Modal from "../Modal";
 import { css } from "@emotion/react";
+import TrashIcon from "../../assets/trash";
 
 const Container = styled.div`
   position: absolute;
@@ -21,7 +22,7 @@ const Container = styled.div`
 `;
 
 const Row = styled.div`
-  padding: 17px 15px;
+  padding: 10px 15px;
   cursor: pointer;
   color: #0f1419;
   font-size: 15px;
@@ -53,6 +54,16 @@ export default function PostPopover({ post, closePopover }: Props) {
       <Row onClick={() => setIsEditing(true)}>
         <EditIcon />
         <Text>Editar</Text>
+      </Row>
+
+      <Row
+        onClick={() => setIsEditing(true)}
+        css={css`
+          color: rgb(224, 36, 94);
+        `}
+      >
+        <TrashIcon />
+        <Text>Excluir</Text>
       </Row>
 
       <Modal

@@ -7,8 +7,9 @@ export type IPost = {
   authorId: string;
   createdAt: Date;
   likes: string[];
+  images: string[];
 };
 
-export type CreatePostBody = { content: string };
+export type CreatePostBody = { content: string; images: Blob[] };
 
 export type UpdatePostBody = { content: string; authorId: string };
