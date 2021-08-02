@@ -1,7 +1,6 @@
 import { toast } from "react-toastify";
 import { SERVER_URL } from "../config.json";
 import { CreatePostBody, IPost, UpdatePostBody } from "../types/PostTypes";
-import { User } from "../types/UserTypes";
 import { localStorageGetItem } from "../utils/localStorage";
 import { ImageApi } from "./ImageAPI";
 
@@ -96,9 +95,30 @@ async function update(
   }
 }
 
+async function deletePost(postId: string): Promise<boolean> {
+  const accessToken = localStorageGetItem("ACCESS_TOKEN");
+  const response = await fetch(`${SERVER_URL}/post/${postId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+
+  const responseObj = await response.json();
+  if (response.status === 200) {
+    return true;
+  } else {
+    toast(responseObj.error.message, { type: "error" });
+    return false;
+  }
+}
+
 export const PostApi = {
   create,
   get,
   update,
+  deletePost,
   like,
 };

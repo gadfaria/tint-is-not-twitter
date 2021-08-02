@@ -42,7 +42,6 @@ export function initUserRoutes(app: FastifyApp, { prisma }: Services) {
       let user = await prisma.user.create({
         data: {
           ...req.body,
-          avatar: "",
           password: passwordWithHash,
           accessToken,
           createdAt: new Date(),
@@ -101,6 +100,66 @@ export function initUserRoutes(app: FastifyApp, { prisma }: Services) {
       if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
 
       SendSuccess(res, 200, user);
+    }
+  );
+
+  app.get<{ Params: { userId: string } }>(
+    "/follow/:userId",
+    {
+      prefixTrailingSlash: "no-slash",
+      schema: {
+        description: "Get user by accessToken",
+      },
+    },
+    async (req, res) => {
+      const { authorization } = req.headers;
+      const { userId } = req.params;
+
+      const accessToken = (authorization as string).split(" ")[1];
+
+      let user = await prisma.user.findUnique({ where: { accessToken } });
+
+      if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
+
+      await prisma.following.create({
+        data: {
+          userId: user.id,
+          followingUserId: userId,
+          createdAt: new Date(),
+        },
+      });
+
+      SendSuccess(res, 200, user);
+    }
+  );
+
+  app.get<{}>(
+    "/to-follow",
+    {
+      prefixTrailingSlash: "no-slash",
+      schema: {
+        description: "Get user by accessToken",
+      },
+    },
+    async (req, res) => {
+      const { authorization } = req.headers;
+
+      const accessToken = (authorization as string).split(" ")[1];
+
+      let user = await prisma.user.findUnique({
+        where: { accessToken },
+        include: { following: true },
+      });
+
+      if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
+
+      const followingIds = user?.following.map((f) => f.followingUserId);
+
+      const usersToFollow = await prisma.user.findMany({
+        where: { id: { notIn: [...followingIds, user.id] } },
+      });
+
+      SendSuccess(res, 200, usersToFollow);
     }
   );
 }

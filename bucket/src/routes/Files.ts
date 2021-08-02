@@ -2,7 +2,6 @@ import fs from "fs";
 import fsPromise from "fs/promises";
 import { nanoid } from "nanoid";
 import { resolve } from "path";
-import sharp from "sharp";
 import { pipeline } from "stream";
 import util from "util";
 import { FastifyApp } from "../types/common";
@@ -79,84 +78,6 @@ export function initFileRoutes(app: FastifyApp, service: {}) {
     return res.send({
       id: `${id}.${fileExtension}`,
     });
-  });
-
-  /**
-   * Compresses an image by forcing it to be png
-   */
-  app.post("/compressed", async (req, res) => {
-    try {
-      const metaReader = sharp().metadata();
-      const jpegCompresser = sharp().jpeg();
-      const thumbnailGenerator = sharp().resize(200).jpeg();
-      const id = `img_${nanoid()}`;
-      console.log({ id });
-      const data = await req.file();
-
-      if (!data) {
-        return res.code(500).send({
-          error: "File must not be empty!",
-        });
-      }
-
-      // Write file to disk
-      let fileExtension = "jpg";
-      let jpegCompresserPipe: NodeJS.ReadableStream;
-
-      // If it's already jpg, just pass through
-      if (fileExtension === "jpg" || fileExtension === "jpeg") {
-        jpegCompresserPipe = data.file.setMaxListeners(30);
-      } else {
-        jpegCompresserPipe = data.file.pipe(jpegCompresser).setMaxListeners(30);
-      }
-
-      let imageStream = fs.createWriteStream(
-        `${BUCKET_DIR}/${id}.${fileExtension}`
-      );
-
-      await pump(jpegCompresserPipe, imageStream);
-
-      /**
-       * Now we invoke Sharp on the image directly to create the thumbnails
-       * and check if the dimensions are within constraints
-       */
-      let originalFile = sharp(`${BUCKET_DIR}/${id}.${fileExtension}`);
-
-      let info = await originalFile.metadata();
-
-      // Create thumbnail
-      await originalFile.toFile(`${BUCKET_DIR}/thumb/${id}.${fileExtension}`);
-
-      if (info.width && info.width > 1280) {
-        // Create a resized version of the file
-        await originalFile
-          .resize({ width: 1280 })
-          .toFile(`${BUCKET_DIR}/${id}.${fileExtension}.resized`);
-
-        // Overwrite it
-        await fsPromise.rename(
-          `${BUCKET_DIR}/${id}.${fileExtension}.resized`,
-          `${BUCKET_DIR}/${id}.${fileExtension}`
-        );
-      }
-
-      /**
-       * Store a .json with the mimetype so we can decode this later
-       */
-      await fsPromise.writeFile(
-        `${BUCKET_DIR}/${id}.${fileExtension}.json`,
-        JSON.stringify({
-          mimetype: "image/jpeg",
-        })
-      );
-
-      return res.send({
-        id: `${id}.${fileExtension}`,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(400).send({ err });
-    }
   });
 
   /**

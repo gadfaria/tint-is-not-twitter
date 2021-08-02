@@ -15,9 +15,8 @@ import "../styles/globals.css";
 import { News } from "../types/NewsTypes";
 import { localStorageClear, localStorageGetItem } from "../utils/localStorage";
 import mqtt from "mqtt";
+import { toFollowAtom } from "../atom/ToFollowAtom";
 dayjs.extend(relativeTime);
-
-
 
 export const mqttClient = mqtt.connect("ws://localhost:8888");
 mqttClient.on("connect", () => console.log("Connected MQTT!"));
@@ -25,6 +24,8 @@ mqttClient.on("connect", () => console.log("Connected MQTT!"));
 function MyApp({ Component, pageProps }: AppProps) {
   const [, setNews] = useAtom(newsAtom);
   const [, serUser] = useAtom(userAtom);
+
+  const [, setToFollow] = useAtom(toFollowAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -35,6 +36,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       const newsObject: { articles: News[] } = await news.json();
       setNews(newsObject.articles);
+    })();
+
+    (async () => {
+      const toFollow = await UserApi.toFollow();
+      setToFollow(toFollow);
     })();
 
     (async () => {

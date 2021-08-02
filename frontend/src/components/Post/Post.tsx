@@ -9,6 +9,7 @@ import { BUCKET_URL } from "../../config.json";
 import { mqttClient } from "../../pages/_app";
 import { styledScrollBar } from "../../styles/general";
 import { IPost } from "../../types/PostTypes";
+import { DEFAULT_AVATAR } from "../../utils/constant";
 import ImgGrid, { ImageGridCounter, Img } from "../ImgGrid";
 import PostPopover from "./PostPopver";
 
@@ -34,15 +35,11 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.img`
   width: 48px;
   height: 48px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: url("https://avatars.githubusercontent.com/u/69378560?s=460&u=831bbebb1c4c52f9b9b28469b54acca7ed89c69b&v=4");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
   margin-right: 15px;
 `;
 
@@ -116,14 +113,22 @@ export default function Post({ post: postFromProps, userId }: Props) {
 
   return (
     <Container>
-      <ThreePoints onClick={() => setShowPopover(!showPopover)}>
-        <ThreePointsIcon width="18" height="18" />
-      </ThreePoints>
+      {post.authorId === userId && (
+        <ThreePoints onClick={() => setShowPopover(!showPopover)}>
+          <ThreePointsIcon width="18" height="18" />
+        </ThreePoints>
+      )}
       {showPopover && (
         <PostPopover closePopover={() => setShowPopover(false)} post={post} />
       )}
       <Wrapper>
-        <Avatar />
+        <Avatar
+          src={
+            post.author.avatar
+              ? `${BUCKET_URL}/file/${post.author.avatar}`
+              : DEFAULT_AVATAR
+          }
+        />
         <div
           css={css`
             display: flex;

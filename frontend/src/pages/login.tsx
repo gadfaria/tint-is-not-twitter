@@ -5,7 +5,9 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
 import { LoginApi } from "../apis/LoginAPI";
+import { UserApi } from "../apis/UserAPI";
 import { TintLogo } from "../assets/logo";
+import { toFollowAtom } from "../atom/ToFollowAtom";
 import { userAtom } from "../atom/UserAtom";
 import SeoHead from "../components/SeoHead";
 import StyledButton from "../components/StyledButton";
@@ -45,12 +47,16 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [, setUser] = useAtom(userAtom);
+  const [, setToFollow] = useAtom(toFollowAtom);
   const router = useRouter();
 
   async function handleClick() {
     const user = await LoginApi({ username, password });
     if (!user) return;
     setUser(user);
+    
+    const toFollow = await UserApi.toFollow();
+    setToFollow(toFollow);
     localStorageSetItem("ACCESS_TOKEN", user.accessToken);
     router.push("/home");
   }

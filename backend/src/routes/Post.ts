@@ -51,11 +51,19 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
     async (req, res) => {
       const { authorization } = req.headers;
       const accessToken = (authorization as string).split(" ")[1];
-      let user = await prisma.user.findUnique({ where: { accessToken } });
+      let user = await prisma.user.findUnique({
+        where: { accessToken },
+        include: { following: true },
+      });
       if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
 
       const posts = await prisma.post.findMany({
         orderBy: [{ createdAt: "desc" }],
+        where: {
+          authorId: {
+            in: [...user.following.map((f) => f.followingUserId), user.id],
+          },
+        },
         include: {
           author: true,
           likes: true,
@@ -129,6 +137,34 @@ export function initPostRoutes(app: FastifyApp, { prisma }: Services) {
       });
 
       SendSuccess(res, 200, like);
+    }
+  );
+
+  app.delete<{ Params: PostIdParamsIRoute }>(
+    "/:postId",
+    {
+      prefixTrailingSlash: "no-slash",
+      schema: {
+        description: "Get user by accessToken",
+      },
+    },
+    async (req, res) => {
+      const { authorization } = req.headers;
+      const { postId } = req.params;
+      const accessToken = (authorization as string).split(" ")[1];
+      let user = await prisma.user.findUnique({ where: { accessToken } });
+
+      if (!user) return SendError(res, 400, UserErrors.NONEXISTENT_USER);
+
+      await prisma.like.deleteMany({ where: { postId } });
+      await prisma.image.deleteMany({ where: { postId } });
+      await prisma.post.delete({
+        where: {
+          id: postId,
+        },
+      });
+
+      SendSuccess(res, 200, {});
     }
   );
 }

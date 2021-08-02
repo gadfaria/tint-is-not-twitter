@@ -3,8 +3,11 @@ import dayjs from "dayjs";
 import { useAtom } from "jotai";
 import React from "react";
 import { newsAtom } from "../../atom/NewsAtom";
+import { toFollowAtom } from "../../atom/ToFollowAtom";
+import FollowSuggestion from "./FollowSugestion";
 import List from "./List";
 import News from "./News";
+import { BUCKET_URL } from "../../config.json";
 
 export const Container = styled.div`
   min-width: 100%;
@@ -15,8 +18,8 @@ export const Body = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 60px 32px 200px;
-  margin-top: 4px;
+  padding: 0px 32px 200px;
+  margin-top: 20px;
 
   > div + div {
     margin-top: 16px;
@@ -68,13 +71,13 @@ export const SearchInput = styled.input`
 
 export default function SideBar() {
   const [news] = useAtom(newsAtom);
-
+  const [toFollow] = useAtom(toFollowAtom);
   return (
     <Container>
-      <SearchWrapper>
+      {/* <SearchWrapper>
         <SearchInput placeholder="Buscar no Twitter" />
-        {/* <SearchIcon /> */}
-      </SearchWrapper>
+         <SearchIcon /> 
+      </SearchWrapper> */}
       <Body>
         <List
           title="O que está acontecendo"
@@ -90,6 +93,22 @@ export default function SideBar() {
             );
           })}
         />
+
+        {toFollow.length > 0 && (
+          <List
+            title="Quem seguir"
+            elements={toFollow.map((f) => (
+              <FollowSuggestion
+                name={f.name}
+                nickname={f.username}
+                userId={f.id}
+                avatarUrl={
+                  f.avatar ? `${BUCKET_URL}/file/${f.avatar}` : undefined
+                }
+              />
+            ))}
+          />
+        )}
       </Body>
     </Container>
   );

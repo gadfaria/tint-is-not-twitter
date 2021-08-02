@@ -8,6 +8,10 @@ import { useState } from "react";
 import Modal from "../Modal";
 import { css } from "@emotion/react";
 import TrashIcon from "../../assets/trash";
+import { useAtom } from "jotai";
+import { postsAtom } from "../../atom/PostsAtom";
+import { PostApi } from "../../apis/PostAPI";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   position: absolute;
@@ -49,6 +53,16 @@ export default function PostPopover({ post, closePopover }: Props) {
     closePopover();
   });
 
+  const [, setPosts] = useAtom(postsAtom);
+
+  async function handleDelete() {
+    const isDeleted = await PostApi.deletePost(post.id);
+
+    if (!isDeleted) return;
+    toast("Post deletado", { type: "info" });
+    setPosts((posts) => posts.filter((p) => p.id !== post.id));
+  }
+
   return (
     <Container ref={popOverRef}>
       <Row onClick={() => setIsEditing(true)}>
@@ -57,7 +71,7 @@ export default function PostPopover({ post, closePopover }: Props) {
       </Row>
 
       <Row
-        onClick={() => setIsEditing(true)}
+        onClick={handleDelete}
         css={css`
           color: rgb(224, 36, 94);
         `}
@@ -76,7 +90,12 @@ export default function PostPopover({ post, closePopover }: Props) {
           max-height: 420px;
         `}
       >
-        <PostModal post={post} />
+        <PostModal
+          post={post}
+          closeModal={() => {
+            setIsEditing(false);
+          }}
+        />
       </Modal>
     </Container>
   );

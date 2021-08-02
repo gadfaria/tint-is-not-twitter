@@ -16,6 +16,9 @@ import readFile from "../../utils/ReadFile";
 import StyledButton from "../StyledButton";
 import ImgGrid, { ImageGridCounter, Img } from "../ImgGrid";
 import ImageIcon from "../../assets/image";
+import { DEFAULT_AVATAR } from "../../utils/constant";
+import { userAtom } from "../../atom/UserAtom";
+import { BUCKET_URL } from "../../config.json";
 
 const Container = styled.div`
   overflow-y: auto;
@@ -32,15 +35,11 @@ const Container = styled.div`
   ${styledScrollBar}
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.img`
   width: 48px;
   height: 48px;
-  flex-shrink: 0;
   border-radius: 50%;
-  background: url("https://avatars.githubusercontent.com/u/69378560?s=460&u=831bbebb1c4c52f9b9b28469b54acca7ed89c69b&v=4");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+
   margin-right: 15px;
 `;
 
@@ -67,6 +66,7 @@ const ButtonSize = css`
 
 type Props = {
   post?: IPost;
+  closeModal?: () => void;
 };
 
 export interface ImagesObj {
@@ -75,10 +75,11 @@ export interface ImagesObj {
   url: string;
 }
 
-export default function CreatePostContent({ post }: Props) {
+export default function CreatePostContent({ post, closeModal }: Props) {
   const [, setPosts] = useAtom(postsAtom);
   const [images, setImages] = useState<ImagesObj[]>([]);
-
+  const [user] = useAtom(userAtom);
+  const [isLoading, setIsLoading] = useState(false);
   const imageRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
@@ -149,6 +150,7 @@ export default function CreatePostContent({ post }: Props) {
   });
 
   async function handleClick() {
+    setIsLoading(true);
     if (!post) {
       const newPost = await PostApi.create({
         content: editor!.getHTML(),
@@ -168,6 +170,8 @@ export default function CreatePostContent({ post }: Props) {
         post.id
       );
     }
+    setIsLoading(false);
+    closeModal && closeModal();
   }
 
   async function onFileChange(e: any) {
@@ -187,11 +191,15 @@ export default function CreatePostContent({ post }: Props) {
     setImages([...images, ...arrayImages]);
   }
 
-  if (!editor) return <></>;
+  if (!editor || !user) return <></>;
   return (
     <Container>
       <Wrapper>
-        <Avatar />
+        <Avatar
+          src={
+            user.avatar ? `${BUCKET_URL}/file/${user.avatar}` : DEFAULT_AVATAR
+          }
+        />
         <div
           css={css`
             margin-top: 13px;
@@ -252,7 +260,11 @@ export default function CreatePostContent({ post }: Props) {
           <ImageIcon width="25" height="25" />
         </div>
 
-        <StyledButton css={ButtonSize} onClick={handleClick}>
+        <StyledButton
+          css={ButtonSize}
+          onClick={handleClick}
+          isLoading={isLoading}
+        >
           {post ? "Editar" : "Tweetar"}
         </StyledButton>
       </Bottom>

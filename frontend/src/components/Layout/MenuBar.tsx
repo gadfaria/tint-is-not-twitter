@@ -17,7 +17,7 @@ export const Container = styled.div`
   align-items: flex-end;
   flex-direction: column;
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
   justify-content: space-between;
   padding: 0px 32px;
 `;
@@ -79,39 +79,6 @@ const ButtonSize = css`
   height: 48px;
 `;
 
-const ProfileDiv = styled.div`
-  display: flex;
-  align-items: center;
-  transition: background-color 0.2s, color 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  margin: 10px;
-  padding: 12px;
-  border-radius: 50px;
-
-  :hover {
-    background-color: #1a91da10;
-    ${IsActive}
-  }
-`;
-
-const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: url("https://avatars.githubusercontent.com/u/69378560?s=460&u=831bbebb1c4c52f9b9b28469b54acca7ed89c69b&v=4");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-`;
-
-const Profile = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 12px;
-`;
-
 export default function MenuBar() {
   const router = useRouter();
   const [user] = useAtom(userAtom);
@@ -128,7 +95,7 @@ export default function MenuBar() {
           max-height: 420px;
         `}
       >
-        <PostModal />
+        <PostModal closeModal={() => setShowModal(false)}/>
       </Modal>
       <Menu>
         <MenuButton>
@@ -163,14 +130,6 @@ export default function MenuBar() {
           Tweetar
         </StyledButton>
       </Menu>
-
-      <ProfileDiv>
-        <Avatar />
-        <Profile>
-          <strong>{user.name}</strong>
-          <span>@{user.username}</span>
-        </Profile>
-      </ProfileDiv>
     </Container>
   );
 }

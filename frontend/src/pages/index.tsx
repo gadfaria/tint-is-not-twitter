@@ -91,7 +91,7 @@ export default function FirstPage() {
         closeModal={() => setShowCreateUserModal(false)}
         customCss={css`
           width: 600px;
-          height: 420px;
+          height: 550px;
         `}
       >
         <CreateUserModal />

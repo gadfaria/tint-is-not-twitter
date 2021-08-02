@@ -10,6 +10,15 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Following" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "followingUserId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL,
+    FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "Like" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "postId" TEXT NOT NULL,

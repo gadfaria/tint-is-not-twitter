@@ -14,13 +14,14 @@ const Wrapper = styled.div`
 
 type Props = {
   post?: IPost;
+  closeModal: () => void;
 };
 
-export default function PostModal({ post }: Props) {
+export default function PostModal({ post, closeModal }: Props) {
   return (
     <Container>
       <Wrapper>
-        <CreatePostContent post={post} />
+        <CreatePostContent post={post} closeModal={closeModal} />
       </Wrapper>
     </Container>
   );
